@@ -4,7 +4,7 @@ import urllib.parse as parse
 from urlextract import URLExtract
 
 extractor = URLExtract()
-final = {'name': [], 'webpage': [], 'image': [], 'birthplace': []}
+final = []  # {'name': [], 'webpage': [], 'image': [], 'birthplace': []}
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
@@ -28,31 +28,21 @@ def get_info(first_name, last_name):
         player_info = bs4.BeautifulSoup(player.decode(), 'lxml')
 
         player_name = player_info.find('div', attrs={'class': 'name'}).string
-        final.setdefault('name', []).append(player_name)
 
         player_web = player_info.find('a').get('href')
-        player_id = parse.parse_qsl(player_web)
-        final.setdefault('id', []).append(player_id[1][1])
+        player_id = parse.parse_qsl(player_web)[1][1]
 
         player_img = player_info.find('span', attrs={'class': 'db-gallery__thumbnail-image'}).get('style')
-        urls = extractor.find_urls(player_img)
-        final.setdefault('image', []).append(urls[0])
+        player_img = extractor.find_urls(player_img)[0]
 
         player_birth = player_info.find('div', attrs={'class': 'db-gallery__item-subtext'}).string
-        final.setdefault('birthplace', []).append(player_birth)
+
+        player_info_dic = {'name': player_name,
+                           'id': player_id,
+                           'image': player_img,
+                           'birthplace': player_birth}
+        final.append(player_info_dic)
 
 
 get_info('robert', 'kaplan')
-
-dk_results = []
-for i in range(len(final['name'])):
-    new_item = {
-        'name': final['name'][i],
-        'id': final['id'][i],
-        'image': final['image'][i],
-        'birthplace': final['birthplace'][i]
-    }
-    dk_results.append(new_item)
-
-print(dk_results)
-
+print(final)
