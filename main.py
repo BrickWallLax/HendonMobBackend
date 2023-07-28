@@ -4,13 +4,14 @@ import urllib.parse as parse
 from urlextract import URLExtract
 
 extractor = URLExtract()
-final = []  # {'name': [], 'webpage': [], 'image': [], 'birthplace': []}
+final = []
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
 
-def get_info(first_name, last_name):
-    url = "https://www.thehendonmob.com/search/?q=" + first_name + "+" + last_name
+def get_info(name):
+    parse.quote(name, safe=' ')
+    url = "https://www.thehendonmob.com/search/?q=" + name
     scraped = requests.get(url, headers=headers)
 
     hendonmob_search = bs4.BeautifulSoup(scraped.content.decode(), 'lxml')
@@ -44,5 +45,5 @@ def get_info(first_name, last_name):
         final.append(player_info_dic)
 
 
-get_info('robert', 'kaplan')
+get_info('robert kaplan')
 print(final)
