@@ -42,5 +42,17 @@ def get_info(first_name, last_name):
         final.setdefault('birthplace', []).append(player_birth)
 
 
-get_info('darin', 'kaplan')
-print(final['name'], final['id'], final['image'], final['birthplace'])
+get_info('robert', 'kaplan')
+
+dk_results = []
+for i in range(len(final['name'])):
+    new_item = {
+        'name': final['name'][i],
+        'id': final['id'][i],
+        'image': final['image'][i],
+        'birthplace': final['birthplace'][i]
+    }
+    dk_results.append(new_item)
+
+print(dk_results)
+
